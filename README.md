@@ -1,220 +1,111 @@
-# 📥 AcademiPack Downloader
+# AcademiPack Downloader
 
-A lightweight, open-source toolkit to **batch download all course files** from any Learning Management System (Moodle, Canvas, Blackboard, and more) — directly from your browser, using your active session.
+AcademiPack Downloader is a platform-agnostic browser utility that helps users download documents visibly linked on supported LMS course pages and already available to their own authorized account.
 
-No installation required. No external servers. Your credentials never leave your browser.
+Platform-agnostic means that the project can be adapted to different LMS page structures. It does not mean unrestricted access to every LMS or every resource.
 
----
+The tool automates a repetitive action that the user can already perform manually. It does not grant new permissions.
 
-## ✨ Features
+The tool does not bypass authentication, authorization, paywalls, DRM or other access controls. It must not be used with another person's account or session, to discover hidden resources, or to access content the user is not authorized to download.
 
-- 📎 Downloads PDFs, Word, PowerPoint, Excel, and other documents in one click
-- 🔒 Works with your existing browser session — no login automation needed
-- ⏱️ Configurable delay between downloads to avoid server throttling
-- 🚫 Filters out non-file activities (quizzes, forums, assignments)
-- 🌐 Adaptable to any LMS platform
-- 🆓 100% free and open source (MIT License)
+Downloading a document does not automatically grant permission to redistribute, publish, sell or share it.
 
----
+Compatibility depends on the LMS version, the institution's configuration and the structure of the course page. Compatibility is not guaranteed.
 
-## 🚀 Quick Start
+The project has no backend, telemetry or credential collection. It does not intentionally read or transmit passwords, cookies or session tokens. Network requests are restricted to the current LMS origin.
 
-There are **two methods** depending on your technical comfort level:
+## What the project does
 
-| Method | Best for | Setup time |
-|--------|----------|------------|
-| [Bookmarklet](./bookmarklet/) | Anyone, no coding needed | 30 seconds |
-| [Console Script](./console-script/) | Advanced users, more reliable | 2 minutes |
+- Works only with documents visibly linked on the current page
+- Restricts requests to the same origin as the current LMS page
+- Uses the user's own active session without credential prompts
+- Stops on authentication failures, access denials and rate limiting
+- Runs one download attempt at a time with a minimum safe delay
 
----
+## What the project does not do
 
-## 📚 Method 1 — Bookmarklet (No-code)
+- It does not bypass authentication, authorization, paywalls, DRM or institutional controls
+- It does not discover hidden resources, guess endpoints or enumerate identifiers
+- It does not read cookies, tokens or browser storage
+- It does not send data to external services
+- It is not designed for exams, grades, assignments, forums or personal data
 
-A bookmarklet is a browser bookmark that runs JavaScript when clicked.
+## Quick start
 
-### Installation
+### Bookmarklet
 
-1. Copy the code below
-2. Create a new bookmark in your browser (Ctrl+D)
-3. Edit the bookmark → paste the code as the URL
-4. Name it something like `📥 AcademiPack Downloader`
+Recommended for most users.
 
-### Generic Bookmarklet
+1. Review the readable source in [bookmarklet/bookmarklet.js](./bookmarklet/bookmarklet.js).
+2. Use the generated bookmarklet in [bookmarklet/bookmarklet.min.js](./bookmarklet/bookmarklet.min.js).
+3. Create a browser bookmark and paste the minified `javascript:` URL as the bookmark target.
 
-```
-javascript:(function(){const D=3000;const EXT=/\.(pdf|docx?|pptx?|xlsx?|odt|ods|odp)(\?|$)/i;const PAT=['pluginfile.php','mod/resource/view.php','download','files'];const links=[...new Set([...document.querySelectorAll('a[href]')].filter(a=>{const h=a.href;return(PAT.some(p=>h.includes(p))||EXT.test(h))&&!h.includes('/quiz/')&&!h.includes('/forum/')&&!h.includes('/assign/');}).map(a=>a.href))];if(!links.length){alert('No downloadable files found on this page.');return;}if(!confirm('Download '+links.length+' file(s)?'))return;links.forEach((href,i)=>setTimeout(()=>{const a=document.createElement('a');a.href=href;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);},i*D));})();
-```
+See [bookmarklet/README.md](./bookmarklet/README.md) for the full workflow.
 
-### Usage
+### Console Script (Advanced)
 
-1. Log in to your LMS and navigate to a course page
-2. Click the bookmarklet
-3. Confirm the download in the popup
-4. Allow pop-ups if prompted by your browser (one-time setup)
+Advanced users can review and run [console-script/script.js](./console-script/script.js).
 
-> ⚠️ Make sure you are on the **course main page** (the one listing all activities), not inside an individual file or activity.
+Chrome may require `allow pasting` before manual console input. Treat that warning as a self-XSS safeguard, not as a routine step. Never paste code you have not reviewed yourself. The code runs inside your current LMS session, so only use the readable source published in this repository and avoid modified third-party copies.
 
----
+See [console-script/README.md](./console-script/README.md) for the full workflow.
 
-## 🛠️ Method 2 — Console Script (Advanced)
+## Authorized and Responsible Use
 
-This method uses `fetch()` to silently resolve intermediate redirect pages before downloading — more reliable, no pop-up issues.
+- Use only your own account and session
+- Use only a session obtained legitimately through the LMS interface
+- Download only visible resources that you are authorized to access and copy
+- Do not share accounts, sessions, cookies or tokens
+- Do not use third-party credentials, cookies or sessions
+- Do not bypass authentication, authorization, paywalls, DRM or technical protection measures
+- Do not try to discover hidden resources, guess endpoints or enumerate identifiers
+- Do not continue using the tool after access has been revoked
+- Do not use it to obtain restricted exams or answer keys
+- Do not use it to extract grades, student submissions, forums or personal data
+- Do not make excessive or disruptive requests
+- Do not redistribute course materials without permission
+- Respect copyright, contracts and institutional rules
+- Stop immediately if the LMS returns access-denied or rate-limit responses
+- Remember that the tool automates a task you can already perform manually; it does not grant new permissions
 
-### Usage
+See [LEGAL_AND_RESPONSIBLE_USE.md](./LEGAL_AND_RESPONSIBLE_USE.md) for more detail.
 
-1. Navigate to the course main page
-2. Open DevTools → Console (`F12` → Console tab)
-3. Type `allow pasting` and press Enter (one-time Chrome security prompt)
-4. Paste the script and press Enter
+## Privacy and security design
 
-### Generic Console Script
+- Same-origin only: the tool rejects external URLs and external redirects
+- Limited scope: it only accepts visible `a[href]` elements inside allowed activity containers
+- Intermediate pages are only resolved when they are same-origin HTML pages linked from visible LMS content
+- No raw HTML scraping by regex
+- No `document.cookie`, `localStorage`, `sessionStorage`, `indexedDB`, `navigator.credentials`, `sendBeacon` or `WebSocket`
+- No backend, telemetry or analytics
+- URL previews and logs redact query strings, fragments and signed parameters
 
-```javascript
-(async function(){
-  // ─── CONFIGURATION ───────────────────────────────────────────────
-  const CONFIG = {
-    delay: 3000,           // milliseconds between downloads
-    base: window.location.origin,
-    // URL patterns that indicate a downloadable resource
-    includePatterns: ['pluginfile.php', 'mod/resource/view.php', '/files/'],
-    // URL patterns to exclude (non-file activities)
-    excludePatterns: ['/quiz/', '/forum/', '/assign/', '/chat/', '/choice/'],
-    // File extensions to match as fallback
-    extensions: /\.(pdf|docx?|pptx?|xlsx?|odt|ods|odp|zip|csv|txt)(\?|$)/i,
-    // CSS selectors for activity containers (customize per platform)
-    activitySelectors: [
-      '.activityname',       // Moodle
-      '.instancename',       // Moodle legacy
-      'li.activity',         // Moodle
-      '.ig-title',           // Canvas
-      '.course-content li',  // Generic
-    ]
-  };
-  // ─────────────────────────────────────────────────────────────────
+## Repository layout
 
-  const activitySelector = CONFIG.activitySelectors.join(',');
+- [bookmarklet/](./bookmarklet/) - bookmarklet source and generated minified artifact
+- [console-script/](./console-script/) - advanced console script
+- [examples/](./examples/) - example selector and pattern notes for supported LMS layouts
 
-  const links = [...new Set(
-    [...document.querySelectorAll('a[href]')]
-      .filter(a => {
-        const h = a.href;
-        const inActivity = a.closest(activitySelector);
-        const included = CONFIG.includePatterns.some(p => h.includes(p)) || CONFIG.extensions.test(h);
-        const excluded = CONFIG.excludePatterns.some(p => h.includes(p));
-        return included && !excluded;
-      })
-      .map(a => a.href)
-  )];
+## Development
 
-  if (!links.length) {
-    alert('No downloadable files found. Check the activitySelectors in CONFIG.');
-    return;
-  }
-
-  if (!confirm(`Found ${links.length} file(s). Start downloading with ${CONFIG.delay/1000}s delay?`)) return;
-
-  console.log(`🚀 Starting download of ${links.length} files...`);
-
-  for (let i = 0; i < links.length; i++) {
-    const href = links[i];
-    console.log(`⏳ (${i+1}/${links.length}) Processing: ${href}`);
-
-    try {
-      let finalUrl = href;
-
-      // Resolve intermediate redirect pages (e.g. Moodle's view.php)
-      if (!CONFIG.extensions.test(href) && !href.includes('forcedownload')) {
-        const res = await fetch(href, { credentials: 'include' });
-        const html = await res.text();
-        const doc = new DOMParser().parseFromString(html, 'text/html');
-
-        const fileLink = [...doc.querySelectorAll('a[href]')]
-          .find(a => CONFIG.extensions.test(a.href) || a.href.includes('pluginfile.php'));
-
-        if (fileLink) {
-          finalUrl = fileLink.href;
-        } else {
-          const match = html.match(new RegExp(
-            CONFIG.base.replace('.', '\\.') + '/[^"\'&\\s]+(' +
-            CONFIG.extensions.source + ')', 'i'
-          ));
-          if (match) finalUrl = match[0];
-        }
-      }
-
-      // Force download instead of opening in browser
-      if (!finalUrl.includes('forcedownload')) {
-        finalUrl += (finalUrl.includes('?') ? '&' : '?') + 'forcedownload=1';
-      }
-
-      const a = document.createElement('a');
-      a.href = finalUrl;
-      a.download = '';
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
-      console.log(`✅ (${i+1}/${links.length}) Downloaded`);
-
-    } catch(e) {
-      console.log(`❌ (${i+1}/${links.length}) Error: ${e.message}`);
-    }
-
-    if (i < links.length - 1) {
-      await new Promise(r => setTimeout(r, CONFIG.delay));
-    }
-  }
-
-  console.log('🎉 All done!');
-  alert(`Download complete. Check the console for details.`);
-})();
+```bash
+npm install
+npm run build
+npm run lint
+npm test
+npm run check:bookmarklet
+npm run secret-scan
 ```
 
----
+## Security and contribution
 
-## 🌐 Platform-Specific Examples
+- Read [SECURITY.md](./SECURITY.md) before reporting vulnerabilities
+- Read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request
 
-Tested configurations for common LMS platforms:
+## No affiliation
 
-| Platform | Example | Notes |
-|----------|---------|-------|
-| [Moodle](./examples/moodle/) | Standard + custom themes | Most tested |
-| [Canvas](./examples/canvas/) | Instructure Canvas | Beta |
-| [Blackboard](./examples/blackboard/) | Ultra + Original | Beta |
+AcademiPack Downloader is an independent community project. It is not affiliated with, endorsed by, sponsored by or officially supported by Moodle, Instructure Canvas, Anthology Blackboard, any university or any LMS provider. Product names and trademarks belong to their respective owners.
 
----
+## License
 
-## ⚙️ Customization
-
-The console script has a `CONFIG` block at the top you can edit:
-
-```javascript
-const CONFIG = {
-  delay: 3000,           // increase if downloads get cut off
-  includePatterns: [...], // URL fragments that signal a file
-  excludePatterns: [...], // activity types to skip
-  activitySelectors: [...] // CSS selectors for your LMS layout
-};
-```
-
----
-
-## ⚠️ Responsible Use
-
-- Only download files **you are authorized to access**
-- Do not use this to bypass paywalls or access restricted content
-- Check your institution's terms of service
-- This tool does not bypass authentication — it uses your existing session
-
----
-
-## 🤝 Contributing
-
-Found a bug or want to add support for a new platform? See [CONTRIBUTING.md](./CONTRIBUTING.md).
-
----
-
-## 📄 License
-
-MIT License — free to use, modify, and distribute. See [LICENSE](./LICENSE).
+MIT License. See [LICENSE](./LICENSE).

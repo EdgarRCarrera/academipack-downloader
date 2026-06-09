@@ -1,56 +1,44 @@
-# Canvas (Instructure) Example
+# Canvas Example
 
-Configuration for Canvas LMS by Instructure.
+These selectors and URL patterns are examples for Canvas-style module pages. Compatibility depends on the institution's configuration and the visible DOM on the current page.
 
-> **Beta** - Canvas uses a React-rendered interface that loads content dynamically. The script may not detect all files if the page has not fully loaded. Scroll to the bottom of the Modules page before running.
-
-## Where to run the script
-
-Navigate to your course's **Modules** page:
+## Typical page
 
 ```
 https://[your-canvas-domain]/courses/[course-id]/modules
 ```
 
-## activitySelectors for Canvas
+## Typical selectors
 
 ```javascript
 activitySelectors: [
-  '.ig-title',              // Module item title
-  '.module-item-title',     // Alternative selector
-  'li.context_module_item', // Module item container
+  ".ig-title",
+  ".module-item-title",
+  "li.context_module_item"
 ]
 ```
 
-## includePatterns for Canvas
+## Typical include patterns
 
 ```javascript
 includePatterns: [
-  '/files/',                 // Canvas file URLs
-  'download?download_frd=1', // Canvas force download
-  '/courses/',               // Course file links
+  "/files/",
+  "download?download_frd=1",
+  "/courses/"
 ]
 ```
 
-## excludePatterns for Canvas
+## Typical exclusions
 
 ```javascript
 excludePatterns: [
-  '/assignments/',
-  '/quizzes/',
-  '/discussion_topics/',
-  '/pages/',
-  '/external_tools/',
-  '/modules/items/', // Module item pages (not files)
+  "/assignments/",
+  "/quizzes/",
+  "/discussion_topics/",
+  "/pages/",
+  "/external_tools/",
+  "/modules/items/"
 ]
 ```
 
-## Canvas-specific tip
-
-Canvas file links often look like:
-
-```
-https://[domain]/courses/[id]/files/[file-id]/download?download_frd=1
-```
-
-If the script detects 0 files, try adding `'download?download_frd'` to `includePatterns`.
+Use only your own authorized session. Do not treat these examples as a guarantee that every Canvas deployment is supported.

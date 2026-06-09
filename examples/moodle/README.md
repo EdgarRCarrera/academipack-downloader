@@ -1,55 +1,45 @@
 # Moodle Example
 
-Configuration for standard and custom Moodle installations.
+These selectors and URL patterns are examples for Moodle-style pages. They do not bypass access controls and they do not guarantee compatibility with every institution.
 
-## Tested versions
-
-- Moodle 3.9+
-- Moodle 4.x (Boost theme)
-- Custom themes (e.g. IRIS at Universite Toulouse Jean Jaures)
-
-## activitySelectors for Moodle
+## Typical selectors
 
 ```javascript
 activitySelectors: [
-  '.activityname',          // Moodle 4.x Boost
-  '.instancename',          // Moodle 3.x legacy
-  'li.activity',            // All versions
-  '[data-type="resource"]', // Some custom themes
+  ".activityname",
+  ".instancename",
+  "li.activity",
+  "[data-type=\"resource\"]"
 ]
 ```
 
-## includePatterns for Moodle
+## Typical include patterns
 
 ```javascript
 includePatterns: [
-  'pluginfile.php',            // Direct file downloads
-  'mod/resource/view.php',     // Resource redirect pages
-  'webservice/pluginfile.php', // Webservice variant
+  "pluginfile.php",
+  "mod/resource/view.php",
+  "webservice/pluginfile.php"
 ]
 ```
 
-## excludePatterns for Moodle
+## Typical exclusions
 
 ```javascript
 excludePatterns: [
-  '/mod/quiz/',
-  '/mod/forum/',
-  '/mod/assign/',
-  '/mod/chat/',
-  '/mod/choice/',
-  '/mod/feedback/',
-  '/mod/workshop/',
-  '/mod/scorm/',
-  '/mod/lti/',
-  '/mod/url/',   // External URL links
-  '/mod/label/', // Text labels
-  '/mod/page/',  // HTML pages (not files)
+  "/mod/quiz/",
+  "/mod/forum/",
+  "/mod/assign/",
+  "/mod/chat/",
+  "/mod/choice/",
+  "/mod/feedback/",
+  "/mod/workshop/",
+  "/mod/scorm/",
+  "/mod/lti/",
+  "/mod/url/",
+  "/mod/label/",
+  "/mod/page/"
 ]
 ```
 
-## Notes
-
-- Some Moodle instances collapse sections by default - expand all sections before running the script
-- If files are behind a `/mod/resource/view.php` redirect, use the **console script** (not the bookmarklet) for best results
-- The `forcedownload=1` parameter works on all standard Moodle installations
+Only use these examples on systems where you are explicitly authorized to test and download visible course files.

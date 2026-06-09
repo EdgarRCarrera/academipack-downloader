@@ -1,0 +1,20 @@
+{
+  "name": "academipack-downloader",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Build, test and compliance tooling for AcademiPack Downloader.",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:bookmarklet": "node scripts/build.js bookmarklet",
+    "build:console": "node scripts/build.js console",
+    "check:bookmarklet": "node scripts/check-bookmarklet-sync.js",
+    "format:check": "node scripts/format-check.js",
+    "lint": "node scripts/lint.js",
+    "secret-scan": "node scripts/secret-scan.js",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0",
+    "terser": "5.39.0"
+  }
+}
