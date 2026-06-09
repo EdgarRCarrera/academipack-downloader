@@ -1,43 +1,39 @@
 # Console Script
 
-The console script is more powerful than the bookmarklet - it resolves intermediate redirect pages before downloading, which avoids browser pop-up blocking entirely.
+This is the advanced method. Review the readable source before pasting anything into DevTools.
 
-## When to use this instead of the bookmarklet
+## Self-XSS warning
 
-- The bookmarklet downloaded fewer files than expected
-- Browser keeps blocking pop-ups even after allowing them
-- Your LMS uses redirect pages before serving files (e.g. Moodle's `view.php`)
-- You want real-time progress feedback in the console
+Chrome may require `allow pasting` before pasting into the console. Treat that warning as a self-XSS safeguard, not as a routine step. Never paste code that you have not personally reviewed from the readable source in this repository.
 
-## Usage
+The script runs inside your current LMS session. Do not use modified copies from third parties.
 
-1. Log in to your LMS and navigate to the **course main page**
-2. Open DevTools: `F12` (or `Cmd+Option+I` on Mac) -> click the **Console** tab
-3. Type `allow pasting` and press **Enter** (Chrome security prompt - one time only)
-4. Paste the contents of `script.js` and press **Enter**
-5. Confirm the download in the popup
-6. Watch the progress in the console - each file shows success or error output
+## Review-first workflow
 
-## Configuration
+1. Read [script.js](./script.js)
+2. Open your LMS course page
+3. Open DevTools and go to the Console tab
+4. Paste only the code you have reviewed yourself
+5. Review the redacted preview, progress notes and explicit authorization prompt before continuing
 
-Edit the `CONFIG` block at the top of `script.js`:
+## What it enforces
 
-```javascript
-const CONFIG = {
-  delay: 3000,              // ms between downloads - increase if files are cut off
-  includePatterns: [...],   // URL fragments that signal a downloadable resource
-  excludePatterns: [...],   // activity types to skip
-  extensions: /\.(pdf...)/, // file extensions to match
-  activitySelectors: [...]  // CSS selectors for your LMS layout (see examples/)
-};
-```
+- Same-origin requests only
+- Visible `a[href]` links only
+- No raw HTML regex extraction
+- `credentials: "same-origin"` and restrictive `referrerPolicy`
+- One download attempt at a time
+- Minimum delay of 3000 ms
+- Maximum of 100 files per run
+- Immediate stop on 401, 403 or 429
 
-## Files
+## What it does not do
 
-- `script.js` - full configurable script with comments
+- It does not guess URLs or enumerate identifiers
+- It does not use cookies, local storage or session storage
+- It does not transmit data to external services
+- It does not continue after access-denied responses
 
-There is no separate minified console script. Paste `script.js` directly into the browser console.
+## Maintainer note
 
-## Platform examples
-
-See the [`../examples/`](../examples/) folder for pre-configured versions for Moodle, Canvas, and Blackboard.
+`script.js` is generated with `npm run build`.

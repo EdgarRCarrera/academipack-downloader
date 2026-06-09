@@ -1,50 +1,44 @@
 # Bookmarklet
 
-The bookmarklet is the simplest method - no coding required.
+The bookmarklet is the simpler user-facing method, but you should still review the readable source before using it.
 
-## How it works
+## Canonical review flow
 
-A bookmarklet is a regular browser bookmark where the URL is JavaScript code. When you click it, it runs on the current page using your active session.
+1. Review [bookmarklet.js](./bookmarklet.js), the readable bookmarklet source.
+2. Use [bookmarklet.min.js](./bookmarklet.min.js), the generated `javascript:` bookmark payload.
+3. Do not use modified copies from untrusted third parties.
 
-## Installation (30 seconds)
+## Installation
 
-1. **Copy** the bookmarklet code from `bookmarklet.min.js`
-2. **Create a new bookmark** in your browser toolbar (right-click toolbar -> Add page, or Ctrl+D)
-3. **Edit the bookmark:**
-   - Name: `AcademiPack Downloader` (or anything you like)
-   - URL: paste the entire contents of `bookmarklet.min.js`
-4. **Save**
+1. Copy the full contents of `bookmarklet.min.js`
+2. Create a new browser bookmark
+3. Name it `AcademiPack Downloader`
+4. Paste the `javascript:` string as the bookmark URL
 
 ## Usage
 
-1. Log in to your LMS
-2. Navigate to a **course main page** (the page listing all activities)
-3. **Click the bookmarklet** in your toolbar
-4. A popup will show how many files were found - confirm to start
-5. If Chrome blocks pop-ups, click **"Always allow pop-ups from [domain]"** - this is a one-time step
+1. Log in to your LMS with your own account
+2. Navigate to a course page that visibly lists file links
+3. Click the bookmarklet
+4. Review the redacted preview, document count and progress notes
+5. Confirm only if you are authorized to access and copy those files
 
-## Files
+## Safety limits
 
-- `bookmarklet.js` - human-readable source code
-- `bookmarklet.min.js` - minified version ready to paste as bookmark URL
-
-## Customization
-
-Edit `bookmarklet.js` to adjust:
-
-```javascript
-const DELAY_MS = 3000; // milliseconds between downloads - increase if downloads are cut off
-```
-
-To add file types, edit the `EXT` regex:
-
-```javascript
-const EXT = /\.(pdf|docx?|pptx?|xlsx?|odt|ods|odp)(\?|$)/i;
-//                                                  ^ add new extensions here
-```
+- Same-origin only
+- Visible links only
+- One download attempt at a time
+- Minimum delay of 3000 ms between attempts
+- Maximum of 100 files per run
+- Stops on access denied, authentication required or rate limiting
 
 ## Limitations
 
-- Requires pop-ups to be allowed for the LMS domain
-- Cannot resolve intermediate redirect pages (use the Console Script for that)
-- Only sees files visible in the current DOM - scroll down or expand collapsed sections first
+- The bookmarklet does not inspect hidden resources
+- It does not follow external redirects
+- It does not use cookies, tokens or browser storage directly
+- It does not guarantee compatibility with every LMS configuration
+
+## For maintainers
+
+`bookmarklet.min.js` must be generated with `npm run build` and checked with `npm run check:bookmarklet`.

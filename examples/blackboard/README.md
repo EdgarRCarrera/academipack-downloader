@@ -1,76 +1,49 @@
 # Blackboard Example
 
-Configuration for Blackboard Learn (Original and Ultra experience).
+These selectors and URL patterns are examples for Blackboard layouts. They are intentionally limited to visible same-origin links and do not attempt to discover hidden resources.
 
-> **Beta** - Blackboard's two interfaces (Original and Ultra) have very different DOM structures. See sections below for each.
-
-## Blackboard Original
-
-### Where to run
-
-Navigate to a **Content Area** page (e.g. Course Documents, Course Materials).
-
-### activitySelectors
+## Original experience
 
 ```javascript
 activitySelectors: [
-  '.contentListItem', // Original content list items
-  'li.liItem',
-  '.item',
+  ".contentListItem",
+  "li.liItem",
+  ".item"
 ]
 ```
 
-### includePatterns
-
-```javascript
-includePatterns: [
-  '/bbcswebdav/', // Blackboard file storage
-  '/xid-',        // Blackboard file IDs
-  '/content/file',
-]
-```
-
----
-
-## Blackboard Ultra
-
-### Where to run
-
-Navigate to the **Course Content** page.
-
-### activitySelectors
+## Ultra experience
 
 ```javascript
 activitySelectors: [
-  '[data-type="document"]',
-  '.cl-file',
-  'bb-content-file',
+  "[data-type=\"document\"]",
+  ".cl-file",
+  "bb-content-file"
 ]
 ```
 
-### includePatterns
+## Typical include patterns
 
 ```javascript
 includePatterns: [
-  '/ultra/file',
-  '/learn/api/public/v1/contents/',
-  '/bbcswebdav/',
+  "/bbcswebdav/",
+  "/xid-",
+  "/content/file",
+  "/ultra/file",
+  "/learn/api/public/v1/contents/"
 ]
 ```
 
-### excludePatterns (both versions)
+## Typical exclusions
 
 ```javascript
 excludePatterns: [
-  '/assessment/',
-  '/discussion/',
-  '/assignment/',
-  '/blog/',
-  '/wiki/',
+  "/assessment/",
+  "/discussion/",
+  "/assignment/",
+  "/blog/",
+  "/wiki/"
 ]
 ```
 
-## Notes
-
-- Blackboard often requires you to be on a specific content folder page - there is no single "all files" view like Moodle's course page
-- Consider running the script once per content folder or section
+Use only on systems where you have express authorization to test and download visible course files.

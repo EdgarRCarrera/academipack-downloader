@@ -1,47 +1,58 @@
 # Contributing
 
-Thank you for helping make this tool better for everyone!
+Thank you for helping improve AcademiPack Downloader safely.
 
-## Ways to contribute
+## Before you contribute
 
-### 🐛 Report a bug
-Open an issue with:
-- Your LMS platform and version
-- What happened vs. what you expected
-- The URL pattern of files that weren't detected (you can redact the domain)
+- Read [SECURITY.md](./SECURITY.md)
+- Read [LEGAL_AND_RESPONSIBLE_USE.md](./LEGAL_AND_RESPONSIBLE_USE.md)
+- Test only on systems you own, local fixtures, demo environments or systems where you have express authorization
 
-### 🌐 Add a new platform
-If you've tested the script on a platform not listed in `examples/`, please share your working `CONFIG` block. Even a comment in an issue is helpful.
+## Safe testing rules
 
-### 💡 Suggest an improvement
-Open an issue describing the feature and your use case.
+- Prefer synthetic HTML fixtures over real LMS pages
+- Use your own local, demo or expressly authorized environments when you need interactive testing
+- Never attach real course HTML to an issue or pull request
+- Never publish student data, teacher data, grades, assignments, forum data or other personal information
+- Never publish real cookies, session tokens or browser-profile exports
+- Redact domains, query strings, tokens, course IDs and names before sharing examples
+- Report vulnerabilities privately through [SECURITY.md](./SECURITY.md)
 
-### 🔧 Submit a pull request
+## Changes we welcome
 
-1. Fork the repository
-2. Create a branch: `git checkout -b feature/your-feature-name`
-3. Make your changes
-4. Test on at least one real LMS page
-5. Update the relevant README if needed
-6. Open a pull request with a clear description
+- Better compatibility with additional LMS page structures
+- Accessibility improvements
+- Safer document detection for visible resources
+- Privacy or security hardening
+- Reductions in false positives
+- UI and preview improvements
+- Documentation and translation updates
+- Tests built on synthetic fixtures
 
-## Code style
+## Changes we do not accept
 
-- Plain JavaScript only — no dependencies, no build step
-- Keep the `CONFIG` block at the top of scripts so users can edit it easily
-- Add a comment for every non-obvious line
-- Test that the minified bookmarklet still fits in a browser bookmark URL field (~2000 chars max for some browsers)
+- Authentication or authorization bypass
+- Credential access, cookie access or browser-storage access
+- CAPTCHA bypass
+- Paywall or DRM bypass
+- Rate-limit bypass or aggressive retry logic
+- Endpoint guessing or identifier enumeration
+- Hidden-resource discovery
+- Session reuse from third parties
+- Scraping of exams, grades, assignments, forums or personal data
+- Testing against real systems without authorization
 
-## Adding a new platform example
+## Development workflow
 
-1. Create a folder: `examples/your-platform/`
-2. Add a `README.md` with:
-   - Tested versions
-   - Where to navigate before running the script
-   - `activitySelectors` for that platform
-   - `includePatterns` and `excludePatterns`
-   - Any platform-specific notes or workarounds
+1. Create a branch for your work
+2. Run `npm install`
+3. Run `npm run build`
+4. Run `npm run lint`
+5. Run `npm test`
+6. Run `npm run check:bookmarklet`
+7. Run `npm run secret-scan`
+8. Update documentation if behavior changes
 
-## Questions?
+## Reporting vulnerabilities
 
-Open an issue — no question is too basic.
+Do not open public issues for sensitive security problems. Follow the private reporting process in [SECURITY.md](./SECURITY.md).
